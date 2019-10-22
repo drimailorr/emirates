@@ -1,53 +1,20 @@
-pipeline {
-  agent {
-    kubernetes {
-      label "k8s"
-      yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    name: jenkins_job
-spec:
-  containers:
-  - name: helm
-    image: alpine/helm:2.12.1
-    command:
-    - cat
-    tty: true
-"""
-    }
-  }
-
-  options {
-      disableConcurrentBuilds()
-      buildDiscarder(logRotator(numToKeepStr: '100', daysToKeepStr: '100'))
-  }
-
-  triggers {
-      pollSCM('*/2 * * * *')
-  }
-
-  stages {
-      stage("checkout") {
-          steps {
-              container("dind") {
-                  checkout scm
-              }
-              script{
-                  shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-              }
-          }
-      }
-
-      stage("helm") {
-          steps {
-              container("helm") {
-                  sh """
-                      helm ls
-                  """
-              }
-          }
-      }
+podTemplate(label: "java-mvn",
+             cloud: "openshift",
+             inheritFrom: "maven",
+             containers: [
+     containerTemplate(name: "jnlp",
+                       image: "openshift/jenkins-slave-maven-centos7:v3.9",
+                       resourceRequestMemory: "256Mi",
+                       resourceLimitMemory: "712Mi",
+                       envVars: [
+       envVar(key: "CONTAINER_HEAP_PERCENT", value: "0.25")
+     ])
+   ]) {
+   node("java-mvn") {
+     sh """
+         git clone https://github.com/drimailorr/emirates.git .
+         ./mvnw -Pprod clean verify
+         oc start-build --wait --follow -F app-docker --from-file=target/umsl-0.0.1-SNAPSHOT.jar
+     """
    }
 }
