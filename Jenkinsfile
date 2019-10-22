@@ -29,30 +29,23 @@ spec:
   }
 
   stages {
-      stage("BRANCH build") {
-          when {
-              not { buildingTag() }
-          }
-          stages {
-              stage("checkout") {
-                  steps {
-                      container("dind") {
-                          checkout scm
-                      }
-                      script{
-                          shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-                      }
-                  }
+      stage("checkout") {
+          steps {
+              container("dind") {
+                  checkout scm
               }
+              script{
+                  shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+              }
+          }
+      }
 
-              stage("helm") {
-                  steps {
-                      container("helm") {
-                          sh """
-                              helm ls
-                          """
-                      }
-                  }
+      stage("helm") {
+          steps {
+              container("helm") {
+                  sh """
+                      helm ls
+                  """
               }
           }
       }
