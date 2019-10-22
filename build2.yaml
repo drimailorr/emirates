@@ -10,6 +10,10 @@ items:
   metadata:
     name: app-docker
   spec:
+    resources:
+      limits:
+        cpu: "500m" 
+        memory: "512Mi"
     strategy:
       type: Docker
     source:
