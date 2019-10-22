@@ -13,14 +13,17 @@ items:
     resources:
       limits:
         cpu: "500m" 
-        memory: "512Mi"
+        memory: "712Mi"
     strategy:
       type: Docker
-      binary:
-        asFile: all.jar
     source:
-      git:
-        uri: https://github.com/drimailorr/emirates.git
+      type: Docker
+      dockerfile: |-
+        FROM openjdk:11.0.1-jre-slim-sid
+        COPY umsl-0.0.1-SNAPSHOT.jar /umsl.jar
+        CMD ["java", "-jar", "/umsl.jar"]
+      binary:
+        asFile: umsl-0.0.1-SNAPSHOT.jar
     output:
       to:
         kind: ImageStreamTag
