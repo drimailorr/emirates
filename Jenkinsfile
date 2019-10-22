@@ -13,9 +13,9 @@ podTemplate(label: "java-mvn",
    node("java-mvn") {
      sh """
          git clone https://github.com/drimailorr/emirates.git .
-         ./mvnw -Pprod clean verify
-         sleep 100
-         oc start-build --wait --follow app-docker --from-file=Dockerfile
+         #./mvnw -Pprod clean verify
+         #sleep 100
+         oc start-build --wait --follow app-docker
      """
    }
 }
