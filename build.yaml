@@ -1,0 +1,79 @@
+kind: List
+apiVersion: v1
+items:
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: openshift-jee-sample
+- kind: BuildConfig
+  apiVersion: build.openshift.io/v1
+  metadata:
+    name: openshift-jee-sample-docker
+  spec:
+    strategy:
+      type: Docker
+    source:
+      type: Docker
+      dockerfile: |-
+        FROM openjdk:11.0.1-jre-slim-sid
+        COPY target/*.jar /all.jar
+        ENTRYPOINT ["java", "-jar", "/all.jar"]
+      binary:
+        asFile: all.jar
+    output:
+      to:
+        kind: ImageStreamTag
+        name: openshift-jee-sample:latest
+- kind: BuildConfig
+  apiVersion: build.openshift.io/v1
+  metadata:
+    name: openshift-jee-sample
+  spec:
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfile: |-
+          podTemplate(label: "java-mvn",
+                      cloud: "openshift", 
+                      inheritFrom: "maven", 
+                      containers: [
+              containerTemplate(name: "jnlp", 
+                                image: "openshift/jenkins-slave-maven-centos7:v3.9", 
+                                resourceRequestMemory: "256Mi", 
+                                resourceLimitMemory: "512Mi", 
+                                envVars: [
+                envVar(key: "CONTAINER_HEAP_PERCENT", value: "0.25") 
+              ])
+            ]) {
+            node("java-mvn") {
+
+              stage('Clone app repo') {
+                sh """
+                    git clone https://github.com/drimailorr/emirates.git .
+                """
+              }
+
+              stage('Build test') {
+                sh """
+                    ./mvnw -Pprod clean verify
+                """
+              }
+
+              stage('Build docker') {
+                      sh "oc start-build --wait --follow openshift-jee-sample-docker"
+                  //  openshiftBuild(buildConfig: 'openshift-jee-sample-docker', showBuildLogs: 'true')
+              }
+
+            }
+            //node("master") {
+            //  stage('Build docker') {
+            //          unstash 'jars'
+            //          sh "oc start-build openshift-jee-sample-docker"
+            //      //  openshiftBuild(buildConfig: 'openshift-jee-sample-docker', showBuildLogs: 'true')                    
+            //  }
+            //}
+
+            
+          }
+    triggers:
+      - type: ConfigChange
