@@ -16,6 +16,8 @@ items:
         memory: "512Mi"
     strategy:
       type: Docker
+      binary:
+        asFile: all.jar
     source:
       git:
         uri: https://github.com/drimailorr/emirates.git

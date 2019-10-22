@@ -14,7 +14,7 @@ podTemplate(label: "java-mvn",
      sh """
          git clone https://github.com/drimailorr/emirates.git .
          ./mvnw -Pprod clean verify
-         oc start-build --wait --follow app-docker
+         oc start-build --wait --follow app-docker --from-file target/umsl-0.0.1-SNAPSHOT.jar
      """
    }
 }
