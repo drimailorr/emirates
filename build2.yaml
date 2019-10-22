@@ -13,9 +13,8 @@ items:
     strategy:
       type: Docker
     source:
-      type: Docker
-      binary:
-        asFile: all.jar
+      git:
+        uri: https://github.com/drimailorr/emirates.git
     output:
       to:
         kind: ImageStreamTag
