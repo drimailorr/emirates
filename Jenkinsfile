@@ -12,6 +12,9 @@ podTemplate(label: "java-mvn",
    ]) {
    node("java-mvn") {
      sh """
+         # To overcome resources limitation
+         oc delete dc/app         
+
          git clone https://github.com/drimailorr/emirates.git .
          ./mvnw -Pprod clean verify
          oc start-build --wait --follow app-docker --from-file target/umsl-0.0.1-SNAPSHOT.jar
