@@ -9,6 +9,7 @@ Another challenge was that Openshift Online offers just 2 Gb of resources so I h
 Image stream builder to generate docker image and the actual application itself.
 Anyway long story short here is the basic flow that I've ended up with:
 
+```
                            +-------------------------------------------------------------+                                      
                            |                              OPENSHIFT ONLINE               |                                      
                            |                                                             |                                      
@@ -27,6 +28,7 @@ Anyway long story short here is the basic flow that I've ended up with:
                            |                              |Openshift Docker Registry|    |                                      
                            |                              +-------------------------+    |                                      
                            +-------------------------------------------------------------+                                      
+```
 
 Things to improve:
 
