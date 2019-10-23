@@ -31,10 +31,28 @@ Anyway long story short here is the basic flow that I've ended up with:
 ```
 
 Things to improve:
+ - Split tests so Unit tests can run for each commit and Integration tests will run on Pull requests
+ - Add versions management and github tags for stable version handling
+ - Add multiple environments for Integration, Performance testing
+ - Add test coverage reports
+ - Add Static and dynamic security vulnerability scans
+ - Add versioning of Infrastructure artifacts (Maybe via Helm repository)
+ - Add advanced deployment options (Blue-Green, Canary)
+ ...
 
 
+Deployment instructions:
+
+1. Spin up Jenkins master
+oc new-app -e OPENSHIFT_ENABLE_OAUTH=true -e VOLUME_CAPACITY=10Gi -e MEMORY_LIMIT=512Mi jenkins-persistent
+
+2. Deploy Openshift artifacts
+oc apply -f build.yaml
+
+3. Configure Github webhook for automated deployments on push notifications.
 
 
+---
 
 # UMSL
 
