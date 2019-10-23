@@ -16,7 +16,7 @@ podTemplate(label: "java-mvn",
 
          // To save resources
          stage("Cleanup") {
-           sh "oc delete dc/app"
+           sh "oc scale dc/app --replicas=0"
          }
 
          stage("Checkout") {
@@ -32,22 +32,9 @@ podTemplate(label: "java-mvn",
            sh "oc start-build --wait --follow app-docker --from-file target/umsl-0.0.1-SNAPSHOT.jar"
          }
 
-
-
-//     sh """
-//         # To overcome resources limitation
-//         oc delete dc/app         
-//
-//         git clone https://github.com/drimailorr/emirates.git .
-//         ./mvnw -Pprod clean verify
-//         oc start-build --wait --follow app-docker --from-file target/umsl-0.0.1-SNAPSHOT.jar
-//         openshift.withCluster() {
-//           openshift.withProject() {
-//             def dc = openshift.selector('dc', "app")
-//             dc.rollout().status()
-//           }
-//         }
-//     """
+         stage("Scale up") {
+           sh "oc scale dc/app --replicas=1"
+         }
       }
     }
   } catch (err) {
