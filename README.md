@@ -1,3 +1,39 @@
+
+# About Case Study – Future Airlines
+
+First of all I would like to thank you for interesting challenge.
+Since I've used up free tiers on major public cloud providers like AWS, GCloud or Azure I've decided to choose Openshift Online for a couple of reasons. I've been working with Kubernetes for the last couple of years and had a little exposure to Openshift.
+But I believe from the couple of presentations I saw that it's quite prominent solution in Platform As A Service world.
+So it was a double challenge for me to get quickly up to speed with a theory and have hands on experience to configure a basic flow.
+Another challenge was that Openshift Online offers just 2 Gb of resources so I had to stuff Jenkins master, maven build slave,
+Image stream builder to generate docker image and the actual application itself.
+Anyway long story short here is the basic flow that I've ended up with:
+
+                           +-------------------------------------------------------------+                                                                 
+                           |                              OPENSHIFT ONLINE               |                                                                 
+                           |                                                             |                                                                 
+                           | +-------------+       +-------------+     +--------------+  |                                                                 
+                           | |             |       | BuildConfig |     |DeployConfig, |  |                                                                 
+         +-------+         | |BuildConfig  |   3   | that creates|     |Service,      |  |                                                                 
+ 1.Commit|Github |2.Webhook| |That triggers|------>| ImageStream |     |External Route|  |                                                                 
+ ------->|Code   --------->| |Jenkins      |       | with binary |     |that getting  |  |                                                                 
+         +-------+         | |Pipeline     |       | artifact    |     |deployed      |  |                                                                 
+                           | |             |       |             |     |              |  |                                                                 
+                           | +-------------+       +-------------+     +--------------+  |                                                                 
+                           |                               |                  ^          |                                                                 
+                           |                             4 |                5 |          |                                                                 
+                           |                               v                  |          |                                                                 
+                           |                              +-------------------------+    |                                                                 
+                           |                              |Openshift Docker Registry|    |                                                                 
+                           |                              +-------------------------+    |                                                                 
+                           +-------------------------------------------------------------+                                                                 
+
+Things to improve:
+
+
+
+
+
 # UMSL
 
 This application was generated using JHipster 6.1.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.1.1](https://www.jhipster.tech/documentation-archive/v6.1.1).
