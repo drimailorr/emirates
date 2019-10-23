@@ -42,8 +42,14 @@ items:
       type: JenkinsPipeline
       jenkinsPipelineStrategy: 
         jenkinsfilePath: Jenkinsfile
-    triggers:
-    - type: ConfigChange
+    triggers: 
+    - github:
+        secret: "sasaddsadsa"
+      type: GitHub
+      #    - type: "GitHub"
+      #      github:
+      #        secretReference:
+      #          name: "mysecret"
 
 - apiVersion: v1
   kind: DeploymentConfig
