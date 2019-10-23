@@ -9,24 +9,24 @@ Another challenge was that Openshift Online offers just 2 Gb of resources so I h
 Image stream builder to generate docker image and the actual application itself.
 Anyway long story short here is the basic flow that I've ended up with:
 
-                           +-------------------------------------------------------------+                                                                 
-                           |                              OPENSHIFT ONLINE               |                                                                 
-                           |                                                             |                                                                 
-                           | +-------------+       +-------------+     +--------------+  |                                                                 
-                           | |             |       | BuildConfig |     |DeployConfig, |  |                                                                 
-         +-------+         | |BuildConfig  |   3   | that creates|     |Service,      |  |                                                                 
- 1.Commit|Github |2.Webhook| |That triggers|------>| ImageStream |     |External Route|  |                                                                 
- ------->|Code   --------->| |Jenkins      |       | with binary |     |that getting  |  |                                                                 
-         +-------+         | |Pipeline     |       | artifact    |     |deployed      |  |                                                                 
-                           | |             |       |             |     |              |  |                                                                 
-                           | +-------------+       +-------------+     +--------------+  |                                                                 
-                           |                               |                  ^          |                                                                 
-                           |                             4 |                5 |          |                                                                 
-                           |                               v                  |          |                                                                 
-                           |                              +-------------------------+    |                                                                 
-                           |                              |Openshift Docker Registry|    |                                                                 
-                           |                              +-------------------------+    |                                                                 
-                           +-------------------------------------------------------------+                                                                 
+                           +-------------------------------------------------------------+                                      
+                           |                              OPENSHIFT ONLINE               |                                      
+                           |                                                             |                                      
+                           | +-------------+       +-------------+     +--------------+  |                                      
+                           | |             |       | BuildConfig |     |DeployConfig, |  |                                      
+         +-------+         | |BuildConfig  |   3   | that creates|     |Service,      |  |                                      
+ 1.Commit|Github |2.Webhook| |That triggers|------>| ImageStream |     |External Route|  |                                      
+ ------->|Code   --------->| |Jenkins      |       | with binary |     |that getting  |  |                                      
+         +-------+         | |Pipeline     |       | artifact    |     |deployed      |  |                                      
+                           | |             |       |             |     |              |  |                                      
+                           | +-------------+       +-------------+     +--------------+  |                                      
+                           |                               |                  ^          |                                      
+                           |                             4 |                5 |          |
+                           |                               v                  |          |                                      
+                           |                              +-------------------------+    |                                      
+                           |                              |Openshift Docker Registry|    |                                      
+                           |                              +-------------------------+    |                                      
+                           +-------------------------------------------------------------+                                      
 
 Things to improve:
 
